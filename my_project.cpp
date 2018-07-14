@@ -79,7 +79,7 @@ int main(int argc, char const ** argv)
         
         BamAlignmentRecord record;
         record.qName = CharString("name" + to_string(i));
-        record.rID = static_cast<uint32_t>(occ[i].i2.i1);
+        record.rID = static_cast<uint32_t>(occ[i].i2.i1); //segmentation fault
         record.beginPos = occ[i].i2.i2;
         record.seq = occ[i].i1;
         BamTagsDict tagsDict(record.tags);
