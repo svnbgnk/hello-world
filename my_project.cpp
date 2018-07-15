@@ -1,15 +1,22 @@
 #include <seqan/bam_io.h>
-#include "common.h"
-#include "extension.h"
 #include <seqan/basic.h>
 #include <seqan/sequence.h>
+#include <seqan/align.h>
+#include <seqan/arg_parse.h>
+#include <seqan/index.h>
+#include <seqan/seeds.h>
+#include <seqan/seq_io.h>
+
+#include "common.h"
+#include "extension.h"
 
 using namespace seqan;
 using namespace std;
 
 myGlobalParameters params;
+int global;
 
-
+/*
 class myBamAlignmentRecord
 {
 public:
@@ -17,7 +24,7 @@ public:
     uint16_t flag;                  // FLAG
     int32_t rID;                    // REF
     int32_t beginPos;               // POS
-    uint8_t mapQ;                   // MAPQ mapping quality, 255 for */invalid
+    uint8_t mapQ;                   // MAPQ mapping quality, 255 for invalid
     uint16_t bin;                   // bin for indexing
     String<CigarElement<> > cigar;  // CIGAR string
     int32_t rNextId;                // RNEXT (0-based)
@@ -27,17 +34,31 @@ public:
     CharString qual;                // Quality string as in SAM (Phred).
     CharString tags;                // Tags, raw as in BAM.
 
-    // Constants for marking pos, reference id and length members invalid (== 0/*).
+    // Constants for marking pos, reference id and length members invalid (== 0).
     static int32_t const INVALID_POS = -1;
     static int32_t const INVALID_REFID = -1;
     static int32_t const INVALID_LEN = 0;
 };
-
+*/
 int main(int argc, char const ** argv)
 {
-
-    BamFileOut samFileOut(std::cout, Sam());
-// BamFileOut samFileOut(context(bamFileIn), toCString(samFileOutName));
+    
+    CharString samFileOutName = CharString("/home/sven/devel/my_project-build/ex.sam");
+    
+    myGlobalParameters myobject;
+    params.flipdensity = 0.9;
+    myobject.flipdensity = 0.8;
+    cout << params.flipdensity << endl;
+    cout << "Use Function: " << endl;
+//     my::printAllP(params);
+    params.print();
+    cout << "Try function" << endl;
+    cout << my::calcsomething(0.5, 0.5) << endl;
+    global = 10;
+    seqan::testglobal();
+    
+//     BamFileOut samFileOut(std::cout, Sam());
+    
     
 //     
 //     typedef typename BamHeaderRecord::TTag    TTag;
@@ -46,23 +67,34 @@ int main(int argc, char const ** argv)
 @SQ	SN:ref	LN:45
 @SQ	SN:ref2	LN:40
 */
-
+ /*
+    BamFileOut samFileOut(toCString(samFileOutName));
     BamHeader header;
     BamHeaderRecord firstRecord;
     firstRecord.type = BAM_HEADER_FIRST;
-    appendValue(firstRecord.tags, BamHeaderRecord::TTag("VN", "1.3"));
+    appendValue(firstRecord.tags, BamHeaderRecord::TTag("VN", "3.0"));
     appendValue(firstRecord.tags, BamHeaderRecord::TTag("SO", "coordinate"));
     appendValue(header, firstRecord);
 
     BamHeaderRecord seqRecord;
     seqRecord.type = BAM_HEADER_REFERENCE;
     appendValue(seqRecord.tags, BamHeaderRecord::TTag("SN", "ref"));
-    appendValue(seqRecord.tags, BamHeaderRecord::TTag("LN", "45"));
-    appendValue(seqRecord.tags, BamHeaderRecord::TTag("SN", "ref2"));
-    appendValue(seqRecord.tags, BamHeaderRecord::TTag("LN", "40"));
+    appendValue(seqRecord.tags, BamHeaderRecord::TTag("LN", "999"));
     appendValue(header, seqRecord);
+
+     
+    BamHeaderRecord thirdRecord;
+    thirdRecord.type = BAM_HEADER_REFERENCE;
+    appendValue(thirdRecord.tags, BamHeaderRecord::TTag("SN", "ref2"));
+    appendValue(thirdRecord.tags, BamHeaderRecord::TTag("LN", "999"));
+    appendValue(header, thirdRecord);
     
-    writeHeader(samFileOut, header);
+    
+    writeHeader(samFileOut, header);  
+
+    
+   
+    
     
     vector<Pair<DnaString, Pair<uint32_t, uint32_t> > > occ;
     ;
@@ -75,13 +107,43 @@ int main(int argc, char const ** argv)
     cord = Pair <uint32_t, uint32_t>(1, 92);
     occ.push_back(Pair < DnaString, Pair <uint32_t, uint32_t> > (DnaString("AAACATGCCCTCCCTTCCCCTGTGAGATTACTCGTGGGCAGGGCTTGTCCCTAGGGGGGCCCTGTCATTCAGTGGTTAACCCCGTGGTCCCAGGGTTTAC"), cord));
     
+    StringSet<CharString> contigNameStore;
+    CharString id = "ref";
+    appendValue(contigNameStore, id);
+    id = "ref2";
+    appendValue(contigNameStore, id);
+    NameStoreCache<StringSet<CharString> > contigNameStoreCache(contigNameStore);
+    BamIOContext<StringSet<CharString> > bamIOContext(contigNameStore, contigNameStoreCache);
+    
+    
+   
+// SeqFileIn genomeFileIn(toCString(genomePath));
+// while (!atEnd(genomeFileIn))
+//     {
+//         CharString id;
+//         Dna5String genome;
+//         readRecord(id, genome, genomeFileIn);
+//         appendValue(contigNameStore, id);
+//         // throw away seq
+// }
+    
     for(int i = 0; i < 4; ++i){
         
         BamAlignmentRecord record;
+
+        
         record.qName = CharString("name" + to_string(i));
-        record.rID = static_cast<uint32_t>(1); //Segementaion fault //occ[i].i2.i1
+        record.rID = 0; //Segementaion fault //occ[i].i2.i1
         record.beginPos = occ[i].i2.i2;
         record.seq = occ[i].i1;
+
+        record.mapQ = 255;
+        record.rNextId = BamAlignmentRecord::INVALID_REFID;
+        record.pNext = BamAlignmentRecord::INVALID_POS;
+        record.tLen = BamAlignmentRecord::INVALID_LEN;
+        record.qual = "IIIIIIIIIIIIIIIIIIIIIII";
+        
+        
         BamTagsDict tagsDict(record.tags);
         //getCigarString(...)
     
@@ -91,10 +153,22 @@ int main(int argc, char const ** argv)
         // => tags: "NM:i:2 NH:i:1"
         setTagValue(tagsDict, "NM", 3);
         // => tags: "NM:i:3 NH:i:1"
-    
-    writeRecord(samFileOut, record); 
-    }
+        
+        
      
+        try{
+        writeRecord(samFileOut, record);
+        }
+        catch (ParseError const & e)
+        {
+            std::cerr << "ERROR: input header is badly formatted. " << e.what() << "\n";
+        }
+        catch (IOError const & e)
+        {
+            std::cerr << "ERROR: could not copy header. " << e.what() << "\n";
+        }
+    }
+     */
     
 /*
     
@@ -226,15 +300,7 @@ Errors: 2   < GTGCACATGCTCACACACATCCTCACACACATCCTTACACACCCTCACCCACATGCACTCACACAC
 GTGCACATGCTCACACACATCCTCACACACTTCCTCACACACCCTCACCCACATGCACTCACACACATGCACACACACTCCCTCACTCATGCACACATAC*/
 
     /*
-    myGlobalParameters myobject;
-    params.flipdensity = 0.9;
-    myobject.flipdensity = 0.8;
-    cout << params.flipdensity << endl;
-    cout << "Use Function: " << endl;
-//     my::printAllP(params);
-    params.print();
-    cout << "Try function" << endl;
-    cout << my::calcsomething(0.5, 0.5) << endl;
+
     */
  
 
