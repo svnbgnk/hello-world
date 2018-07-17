@@ -1,0 +1,22 @@
+Loaded reads: 25000
+Loading Index
+Loaded Index. Size:97983126
+Loading bitvectors
+Load the following Bitvectors:
+Filename: ../Data/chr13_tests/chr13_mappa_100/r_bit_vector_100_2_shift_0
+Filename: ../Data/chr13_tests/chr13_mappa_100/r_bit_vector_100_2_shift_1
+Filename: ../Data/chr13_tests/chr13_mappa_100/r_bit_vector_100_2_shift_2
+Filename: ../Data/chr13_tests/chr13_mappa_100/r_bit_vector_100_2_shift_3
+Filename: ../Data/chr13_tests/chr13_mappa_100/l_bit_vector_100_2_shift_0
+Filename: ../Data/chr13_tests/chr13_mappa_100/l_bit_vector_100_2_shift_1
+Filename: ../Data/chr13_tests/chr13_mappa_100/l_bit_vector_100_2_shift_2
+Filename: ../Data/chr13_tests/chr13_mappa_100/l_bit_vector_100_2_shift_3
+Bit vectors loaded. Number: 8
+Start My Search!
+Finished My Search
+Test default
+normal Hits: 369
+direct Hits: 22603
+MyVersion elapsed: 14.7046s
+Default Version elapsed: 17.2055s
+default Hits: 94572
