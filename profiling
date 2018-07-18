@@ -7,8 +7,12 @@
 
 /import/IntelPSXE2017u1/vtune_amplifier_xe/bin64/amplxe-cl -collect advanced-hotspots -knob enable-user-tasks=true -knob analyze-openmp=true -app-working-dir /home/mi/svnbngk/devel/mappability-buildPro -- ./search -I /srv/public/svnbngk/Data/chr13_index/index -B /srv/public/svnbngk/Data/chr13_tests/chr13_mappa_100/ -R /srv/public/svnbngk/Data/reads/chr13/1000k.fa -O /srv/public/svnbngk/Data/chr13_tests/chr13_mappa_100/ -K 100 -E 2 -r 1000000 -d -n
 
+/import/IntelPSXE2017u1/vtune_amplifier_xe/bin64/amplxe-cl -collect advanced-hotspots -knob enable-user-tasks=true -knob analyze-openmp=true -app-working-dir /home/mi/svnbngk/devel/mappability-buildPro -- ./search -I /srv/public/svnbngk/Data/chr13_index/index -B /srv/public/svnbngk/Data/chr13_tests/chr13_mappa_100/ -R /srv/public/svnbngk/Data/reads/chr13/1000k.fa -O /srv/public/svnbngk/Data/chr13_tests/chr13_mappa_100/ -K 100 -E 2 -r 500000
+
 //origninal command
 ./search -I ../Data/chr13_index/index -B ../Data/chr13_tests/chr13_mappa_100/ -R ../Data/reads/chr13/default_1000k.fa -O ../Data/chr13_tests/chr13_mappa_100/ -K 100 -E 2 -r 1000000
 
 /import/IntelPSXE2017u1/vtune_amplifier_xe/bin64/amplxe-gui /home/mi/svnbngk/devel/mappability-buildPro/r000ah
 /import/IntelPSXE2017u1/vtune_amplifier_xe/bin64/amplxe-gui /home/mi/svnbngk/devel/mappability-buildPro/r001ah
+/import/IntelPSXE2017u1/vtune_amplifier_xe/bin64/amplxe-gui /home/mi/svnbngk/r002ah
+/import/IntelPSXE2017u1/vtune_amplifier_xe/bin64/amplxe-gui /home/mi/svnbngk/r003ah
